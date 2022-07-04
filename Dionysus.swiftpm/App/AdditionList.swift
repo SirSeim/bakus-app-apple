@@ -17,16 +17,14 @@ struct AdditionList: View {
                 showProfile = true
             } else {
                 print("first load additions")
-                apiManager.loadAdditions { additions in 
-                    print("recieved additions")
+                apiManager.loadAdditions { additions in
                     additionData.additions = additions
                 }
             }
         }
         .refreshable {
             print("pull refresh additions")
-            apiManager.loadAdditions { additions in 
-                print("recieved additions")
+            apiManager.loadAdditions { additions in
                 additionData.additions = additions
             }
         }
@@ -34,8 +32,7 @@ struct AdditionList: View {
             ToolbarItem {
                 Button {
                     print("button refresh additions")
-                    apiManager.loadAdditions { additions in 
-                        print("recieved additions")
+                    apiManager.loadAdditions { additions in
                         additionData.additions = additions
                     }
                 } label: {
