@@ -16,7 +16,7 @@ let package = Package(
         .iOSApplication(
             name: "Dionysus",
             targets: ["AppModule"],
-            displayVersion: "1.0",
+            displayVersion: "0.1.0",
             bundleVersion: "1",
             appIcon: .placeholder(icon: .smiley),
             accentColor: .presetColor(.purple),
@@ -34,7 +34,7 @@ let package = Package(
                 .localNetwork(purposeString: "Local testing", bonjourServiceTypes: ["_http._tcp"]),
                 .outgoingNetworkConnections()
             ],
-            appCategory: .entertainment
+            appCategory: .utilities
         )
     ],
     targets: [
