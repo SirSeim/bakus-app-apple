@@ -7,36 +7,45 @@ struct AdditionList: View {
     
     @State private var showProfile = false
     
+    func refreshAdditions() {
+        if !apiManager.loggedIn() {
+            showProfile = true
+        } else {
+            print("verify authentication")
+            apiManager.authenticated { loggedIn in
+                if !loggedIn {
+                    print("authentication invalid")
+                    showProfile = true
+                } else {
+                    print("load additions")
+                    apiManager.loadAdditions { additions in
+                        additionData.additions = additions
+                    }
+                }
+            }
+        }
+    }
+    
     var body: some View {
         List(additionData.additions) { addition in
             AdditionRow(addition: addition)
         }
         .navigationTitle("Additions")
         .onAppear {
-            if !apiManager.loggedIn() {
-                showProfile = true
-            } else {
-                print("first load additions")
-                apiManager.loadAdditions { additions in
-                    additionData.additions = additions
-                }
-            }
+            print("first load")
+            refreshAdditions()
         }
         .refreshable {
             print("pull refresh additions")
-            apiManager.loadAdditions { additions in
-                additionData.additions = additions
-            }
+            refreshAdditions()
         }
         .toolbar {
-            ToolbarItem {
+            ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     print("button refresh additions")
-                    apiManager.loadAdditions { additions in
-                        additionData.additions = additions
-                    }
+                    refreshAdditions()
                 } label: {
-                    Image(systemName: "arrow.2.circlepath")
+                    Label("Refresh", systemImage: "arrow.2.circlepath")
                 }
             }
             ToolbarItem(placement: .bottomBar) {
@@ -51,7 +60,6 @@ struct AdditionList: View {
                 .sheet(isPresented: $showProfile) {
                     ProfileSheet(apiManager: apiManager)
                 }
-                
             }
         }
     }

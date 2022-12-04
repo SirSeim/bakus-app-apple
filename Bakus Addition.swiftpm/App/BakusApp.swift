@@ -1,7 +1,7 @@
 import SwiftUI
 
 @main
-struct DionysusApp: App {
+struct BakusApp: App {
     @StateObject private var additionData = AdditionData()
     @StateObject private var profileData = ProfileData()
     private let apiManager = ApiManager()
