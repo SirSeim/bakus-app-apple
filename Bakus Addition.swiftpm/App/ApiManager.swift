@@ -252,6 +252,15 @@ class ApiManager {
         }
     }
     
+    func authenticated(callback: @escaping (Bool) -> Void) {
+        getData(urlString: "/api/v1/auth/account/") { (_: Profile) in
+            callback(true)
+        } fail: { _ in
+            self.clearAuth()
+            callback(false)
+        }
+    }
+    
     func login(username: String, password: String, success: @escaping () -> Void) {
         let payload = LoginPayload(username: username, password: password)
         postData(urlString: "/api/v1/auth/login/", data: payload, ensureTokenSet: false) { (result: LoginSuccess) in
@@ -262,13 +271,17 @@ class ApiManager {
         }
     }
     
+    func clearAuth() {
+        KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
+    }
+    
     func logout(success: @escaping () -> Void) {
         postDataWithoutResponse(urlString: "/api/v1/auth/logout/", data: EmptyPayload()) {
-            KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
+            self.clearAuth()
             print("logged out")
             success()
         } fail: { error in
-            KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
+            self.clearAuth()
             print("failed to logout: \(error)")
             // allow caller code to proceed since token is gone
             success()

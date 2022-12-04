@@ -8,17 +8,19 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "Dionysus",
+    name: "Bakus",
     platforms: [
         .iOS("15.2")
     ],
     products: [
         .iOSApplication(
-            name: "Dionysus",
+            name: "Bakus",
             targets: ["AppModule"],
+            bundleIdentifier: "io.seim.bakus",
+            teamIdentifier: "7L9JHN5TMF",
             displayVersion: "0.1.0",
-            bundleVersion: "1",
-            appIcon: .placeholder(icon: .smiley),
+            bundleVersion: "2",
+            appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.purple),
             supportedDeviceFamilies: [
                 .pad,
@@ -31,7 +33,6 @@ let package = Package(
                 .portraitUpsideDown(.when(deviceFamilies: [.pad]))
             ],
             capabilities: [
-                .localNetwork(purposeString: "Local testing", bonjourServiceTypes: ["_http._tcp"]),
                 .outgoingNetworkConnections()
             ],
             appCategory: .utilities
