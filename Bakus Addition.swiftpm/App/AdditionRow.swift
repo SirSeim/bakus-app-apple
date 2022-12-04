@@ -10,7 +10,7 @@ struct AdditionRow: View {
                 .lineLimit(1)
                 .truncationMode(.tail)
             Spacer()
-            ProgressCircle(progress: addition.progress)
+            ProgressCircle(progress: addition.progress, state: addition.state)
                 .frame(width: 15, height: 15, alignment: .leading)
         }
     }
