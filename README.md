@@ -1,2 +1,2 @@
-# dionysus-app-apple
-🍎 App for Dionysus
+# bakus-app-apple
+🍎 App for Bakus
