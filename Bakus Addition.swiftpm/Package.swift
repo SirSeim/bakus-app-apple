@@ -19,7 +19,7 @@ let package = Package(
             bundleIdentifier: "io.seim.bakus",
             teamIdentifier: "7L9JHN5TMF",
             displayVersion: "0.1.0",
-            bundleVersion: "4",
+            bundleVersion: "5",
             appIcon: .asset("AppIcon"),
             accentColor: .presetColor(.purple),
             supportedDeviceFamilies: [
