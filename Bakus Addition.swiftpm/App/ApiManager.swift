@@ -32,7 +32,7 @@ enum DateError: String, Error {
 struct EmptyPayload: Codable {}
 
 class ApiManager {
-    let host = "https://dionysus.seim.io"
+    let host = "https://bakus.seim.io"
     
     func loggedIn() -> Bool {
         guard let token = token() else {
@@ -42,15 +42,15 @@ class ApiManager {
     }
     
     func setAuth(token: String) {
-        KeychainHelper.standard.save(item: token, service: "dionysus", account: "auth-token")
+        KeychainHelper.standard.save(item: token, service: "bakus", account: "auth-token")
     }
     
     func token() -> String? {
-        return KeychainHelper.standard.read(service: "dionysus", account: "auth-token", type: String.self)
+        return KeychainHelper.standard.read(service: "bakus", account: "auth-token", type: String.self)
     }
     
     func clearAuth() {
-        KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
+        KeychainHelper.standard.delete(service: "bakus", account: "auth-token")
     }
     
     func getURLSession() -> URLSession {
