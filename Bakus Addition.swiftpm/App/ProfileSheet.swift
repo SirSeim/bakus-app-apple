@@ -6,7 +6,7 @@ struct ProfileSheet: View {
     
     @State var username: String = ""
     @State var password: String = ""
-    @State var loggedIn: Bool = false
+    @State var loggedIn: Bool = true
     
     @Environment(\.dismiss) var dismiss
     private enum Field: Int, Hashable {
@@ -17,19 +17,30 @@ struct ProfileSheet: View {
     
     func login() {
         loginFocus = nil
-        apiManager.login(username: username, password: password) {
-            refreshProfile()
+        Task {
+            await apiManager.login(username: username, password: password)
+            await refreshProfile()
         }
     }
     
-    func refreshProfile() {
+    func refreshProfile() async {
         loggedIn = apiManager.loggedIn()
-        if loggedIn {
-            apiManager.loadProfile { profile in
-                profileData.profile = profile
-            }
-        } else {
+        if !loggedIn {
             profileData.profile = Profile.empty
+            return
+        }
+        
+        guard let profile = await apiManager.loadProfile() else {
+            profileData.profile = Profile.empty
+            return
+        }
+        profileData.profile = profile
+    }
+    
+    func logout() {
+        Task {
+            await apiManager.logout()
+            loggedIn = false
         }
     }
     
@@ -43,9 +54,7 @@ struct ProfileSheet: View {
                     KeyValueRow(key: "Last Name", value: profileData.profile.lastName)
                     Spacer()
                     Button("Logout") {
-                        apiManager.logout {
-                            loggedIn = false
-                        }
+                        logout()
                     }
                 } else {
                     TextField("Username", text: $username)
@@ -80,10 +89,12 @@ struct ProfileSheet: View {
             .navigationTitle("Account")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                refreshProfile()
-                if !loggedIn {
-                    DispatchQueue.main.asyncAfter(deadline: .now()+0.75) {
-                        loginFocus = .username
+                Task {
+                    await refreshProfile()
+                    if !loggedIn {
+                        DispatchQueue.main.asyncAfter(deadline: .now()+0.75) {
+                            loginFocus = .username
+                        }
                     }
                 }
             }
