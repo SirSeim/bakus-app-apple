@@ -7,23 +7,25 @@ struct AdditionList: View {
     
     @State private var showProfile = false
     
-    func refreshAdditions() {
+    func refreshAdditions() async {
         if !apiManager.loggedIn() {
             showProfile = true
-        } else {
-            print("verify authentication")
-            apiManager.authenticated { loggedIn in
-                if !loggedIn {
-                    print("authentication invalid")
-                    showProfile = true
-                } else {
-                    print("load additions")
-                    apiManager.loadAdditions { additions in
-                        additionData.additions = additions
-                    }
-                }
-            }
+            return
         }
+        
+        print("verify authentication")
+        let loggedIn = await apiManager.authenticated()
+        if !loggedIn {
+            print("authentication invalid")
+            showProfile = true
+            return
+        }
+        
+        print("load additions")
+        guard let additions = await apiManager.loadAdditions() else {
+            return
+        }
+        additionData.additions = additions
     }
     
     var body: some View {
@@ -33,17 +35,21 @@ struct AdditionList: View {
         .navigationTitle("Additions")
         .onAppear {
             print("first load")
-            refreshAdditions()
+            Task {
+                await refreshAdditions()
+            }
         }
         .refreshable {
             print("pull refresh additions")
-            refreshAdditions()
+            await refreshAdditions()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button {
                     print("button refresh additions")
-                    refreshAdditions()
+                    Task {
+                        await refreshAdditions()
+                    }
                 } label: {
                     Label("Refresh", systemImage: "arrow.2.circlepath")
                 }

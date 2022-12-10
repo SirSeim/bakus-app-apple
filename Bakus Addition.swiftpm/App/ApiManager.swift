@@ -14,19 +14,15 @@ struct ErrorResponse: Codable {
     var detail: String
 }
 
-enum CallErrorType {
+enum CallError: Error {
     case unknown
     case notLoggedIn
     case unexpectedRequest
     case unexpectedResponse
     case badRequest
+    case badUrl
     case unauthorized
     case serverError
-}
-
-struct CallError {
-    var type: CallErrorType
-    var detail: String
 }
 
 enum DateError: String, Error {
@@ -45,8 +41,16 @@ class ApiManager {
         return token.count > 0
     }
     
+    func setAuth(token: String) {
+        KeychainHelper.standard.save(item: token, service: "dionysus", account: "auth-token")
+    }
+    
     func token() -> String? {
-        return  KeychainHelper.standard.read(service: "dionysus", account: "auth-token", type: String.self)
+        return KeychainHelper.standard.read(service: "dionysus", account: "auth-token", type: String.self)
+    }
+    
+    func clearAuth() {
+        KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
     }
     
     func getURLSession() -> URLSession {
@@ -84,10 +88,10 @@ class ApiManager {
             decodedError = try self.getResponseData(ErrorResponse.self, from: data)
         } catch let error {
             print("error decoding error response \(error)")
-            return CallError(type: .unexpectedResponse, detail: "error decoding error response")
+            return CallError.unexpectedResponse
         }
         
-        let errorType: CallErrorType
+        let errorType: CallError
         switch response.statusCode {
         case 400:
             errorType = .badRequest
@@ -98,47 +102,46 @@ class ApiManager {
         default:
             errorType = .unknown
         }
-        return CallError(type: errorType, detail: decodedError.detail)
+        print("error detail: \(decodedError.detail)")
+        return errorType
     }
     
-    func getData<T: Decodable>(urlString: String, ensureTokenSet: Bool = true, success: @escaping ((T) -> Void), fail: @escaping ((CallError) -> Void)) {
+    func getData<T: Decodable>(urlString: String, ensureTokenSet: Bool = true) async throws -> T {
         guard let url = URL(string: "\(host)\(urlString)") else {
             print("error URL: \(urlString)")
-            return
+            throw CallError.badUrl
         }
         
         if ensureTokenSet && !loggedIn() {
-            fail(CallError(type: .notLoggedIn, detail: "not logged in when required for call"))
-            return
+            throw CallError.notLoggedIn
         }
         
         let session = getURLSession()
-        session.dataTask(with: url) { data, response, error in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("could not format HttpResponse")
-                fail(CallError(type: .unexpectedResponse, detail: "could not format HttpResponse"))
-                return
-            }
-            
-            guard let data = data else {
-                fail(CallError(type: .unexpectedResponse, detail: "no data returned from server"))
-                return
-            }
-            if httpResponse.statusCode != 200 {
-                fail(self.formatError(response: httpResponse, data: data))
-                return
-            }
-            
-            do {
-                let decodedData = try self.getResponseData(T.self, from: data)
-                DispatchQueue.main.async {
-                    success(decodedData)
+        return try await withUnsafeThrowingContinuation { c in
+            session.dataTask(with: url) { data, response, error in
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("could not format HttpResponse")
+                    c.resume(throwing: CallError.unexpectedResponse)
+                    return
                 }
-            } catch let error {
-                print(error)
-                fail(CallError(type: .unexpectedResponse, detail: "error decoding successful response"))
-            }
-        }.resume()
+                
+                guard let data = data else {
+                    c.resume(throwing: CallError.unexpectedResponse)
+                    return
+                }
+                if httpResponse.statusCode != 200 {
+                    c.resume(throwing: self.formatError(response: httpResponse, data: data))
+                    return
+                }
+                
+                do {
+                    c.resume(returning: try self.getResponseData(T.self, from: data))
+                } catch let error {
+                    print(error)
+                    c.resume(throwing: CallError.unexpectedResponse)
+                }
+            }.resume()
+        }
     }
     
     func createPostRequest<T: Encodable>(url: URL, data: T) -> URLRequest? {
@@ -156,135 +159,125 @@ class ApiManager {
         return request
     }
     
-    func postData<T: Decodable, Y: Encodable>(urlString: String, data: Y, ensureTokenSet: Bool = true, success: @escaping ((T) -> Void), fail: @escaping ((CallError) -> Void)) {
+    func postData<T: Decodable, Y: Encodable>(urlString: String, data: Y, ensureTokenSet: Bool = true) async throws -> T {
         guard let url = URL(string: "\(host)\(urlString)") else {
             print("error URL: \(urlString)")
-            return
+            throw CallError.badUrl
         }
         if ensureTokenSet && !loggedIn() {
-            fail(CallError(type: .notLoggedIn, detail: "not logged in when required for call"))
-            return
+            throw CallError.notLoggedIn
         }
         
         let session = getURLSession()
         guard let request = createPostRequest(url: url, data: data) else {
-            fail(CallError(type: .unexpectedRequest, detail: "error encoding payload"))
-            return
+            throw CallError.unexpectedRequest
         }
-        session.dataTask(with: request) { data, response, error in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("could not format HttpResponse")
-                fail(CallError(type: .unexpectedResponse, detail: "could not format HttpResponse"))
-                return
-            }
-            
-            guard let data = data else {
-                fail(CallError(type: .unexpectedResponse, detail: "no data returned from server"))
-                return
-            }
-            if httpResponse.statusCode != 200 {
-                fail(self.formatError(response: httpResponse, data: data))
-                return
-            }
-            
-            do {
-                let decodedData = try self.getResponseData(T.self, from: data)
-                DispatchQueue.main.async {
-                    success(decodedData)
-                }
-            } catch let error {
-                print(error)
-                fail(CallError(type: .unexpectedResponse, detail: "error decoding successful response"))
-            }
-        }.resume()
-    }
-    
-    func postDataWithoutResponse<T: Encodable>(urlString: String, data: T, ensureTokenSet: Bool = true, success: @escaping (() -> Void), fail: @escaping ((CallError) -> Void)) {
-        guard let url = URL(string: "\(host)\(urlString)") else {
-            print("error URL: \(urlString)")
-            return
-        }
-        if ensureTokenSet && !loggedIn() {
-            fail(CallError(type: .notLoggedIn, detail: "not logged in when required for call"))
-            return
-        }
-        
-        let session = getURLSession()
-        guard let request = createPostRequest(url: url, data: data) else {
-            fail(CallError(type: .unexpectedRequest, detail: "error encoding payload"))
-            return
-        }
-        session.dataTask(with: request) { data, response, error in
-            guard let httpResponse = response as? HTTPURLResponse else {
-                print("could not format HttpResponse")
-                fail(CallError(type: .unexpectedResponse, detail: "could not format HttpResponse"))
-                return
-            }
-            
-            if httpResponse.statusCode != 204 {
-                guard let data = data else {
-                    fail(CallError(type: .unexpectedResponse, detail: "no data returned from server"))
+        return try await withUnsafeThrowingContinuation { c in
+            session.dataTask(with: request) { data, response, error in
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("could not format HttpResponse")
+                    c.resume(throwing: CallError.unexpectedResponse)
                     return
                 }
-                fail(self.formatError(response: httpResponse, data: data))
-                return
-            }
-            
-            DispatchQueue.main.async {
-                success()
-            }
-        }.resume()
+                
+                guard let data = data else {
+                    c.resume(throwing: CallError.unexpectedResponse)
+                    return
+                }
+                if httpResponse.statusCode != 200 {
+                    c.resume(throwing: self.formatError(response: httpResponse, data: data))
+                    return
+                }
+                
+                do {
+                    c.resume(returning: try self.getResponseData(T.self, from: data))
+                } catch let error {
+                    print(error)
+                    c.resume(throwing: CallError.unexpectedResponse)
+                }
+            }.resume()
+        }
     }
     
-    func loadAdditions(success: @escaping ([Addition]) -> Void) {
-        getData(urlString: "/api/v1/addition/") { (results: AdditionResults) in
-            success(results.results)
-        } fail: { error in
+    func postDataWithoutResponse<T: Encodable>(urlString: String, data: T, ensureTokenSet: Bool = true) async throws -> Void {
+        guard let url = URL(string: "\(host)\(urlString)") else {
+            print("error URL: \(urlString)")
+            throw CallError.badUrl
+        }
+        if ensureTokenSet && !loggedIn() {
+            throw CallError.notLoggedIn
+        }
+        
+        let session = getURLSession()
+        guard let request = createPostRequest(url: url, data: data) else {
+            throw CallError.unexpectedRequest
+        }
+        return try await withUnsafeThrowingContinuation { c in
+            session.dataTask(with: request) { data, response, error in
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    print("could not format HttpResponse")
+                    c.resume(throwing: CallError.unexpectedResponse)
+                    return
+                }
+                
+                if httpResponse.statusCode != 204 {
+                    guard let data = data else {
+                        c.resume(throwing: CallError.unexpectedResponse)
+                        return
+                    }
+                    c.resume(throwing: self.formatError(response: httpResponse, data: data))
+                    return
+                }
+                c.resume()
+            }.resume()
+        }
+    }
+    
+    func loadAdditions() async -> [Addition]? {
+        do {
+            let results: AdditionResults = try await getData(urlString: "/api/v1/addition/")
+            return results.results
+        } catch {
             print("failed to get additions \(error)")
+            return nil
         }
     }
     
-    func loadProfile(success: @escaping (Profile) -> Void) {
-        getData(urlString: "/api/v1/auth/account/") { (profile: Profile) in
-            success(profile)
-        } fail: { error in
+    func loadProfile() async -> Profile? {
+        do {
+            return try await getData(urlString: "/api/v1/auth/account/")
+        } catch {
             print("failed to get profile: \(error)")
+            return nil
         }
     }
     
-    func authenticated(callback: @escaping (Bool) -> Void) {
-        getData(urlString: "/api/v1/auth/account/") { (_: Profile) in
-            callback(true)
-        } fail: { _ in
+    func authenticated() async -> Bool {
+        do {
+            let _: Profile = try await getData(urlString: "/api/v1/auth/account/")
+            return true
+        } catch {
             self.clearAuth()
-            callback(false)
+            return false
         }
     }
     
-    func login(username: String, password: String, success: @escaping () -> Void) {
+    func login(username: String, password: String) async -> Void {
         let payload = LoginPayload(username: username, password: password)
-        postData(urlString: "/api/v1/auth/login/", data: payload, ensureTokenSet: false) { (result: LoginSuccess) in
-            KeychainHelper.standard.save(item: result.token, service: "dionysus", account: "auth-token")
-            success()
-        } fail: { error in
+        do {
+            let result: LoginSuccess = try await postData(urlString: "/api/v1/auth/login/", data: payload, ensureTokenSet: false)
+            setAuth(token: result.token)
+        } catch {
             print("failed to login: \(error)")
         }
     }
     
-    func clearAuth() {
-        KeychainHelper.standard.delete(service: "dionysus", account: "auth-token")
-    }
-    
-    func logout(success: @escaping () -> Void) {
-        postDataWithoutResponse(urlString: "/api/v1/auth/logout/", data: EmptyPayload()) {
-            self.clearAuth()
+    func logout() async -> Void {
+        do {
+            try await postDataWithoutResponse(urlString: "/api/v1/auth/logout/", data: EmptyPayload())
             print("logged out")
-            success()
-        } fail: { error in
-            self.clearAuth()
+        } catch {
             print("failed to logout: \(error)")
-            // allow caller code to proceed since token is gone
-            success()
         }
     }
 }
