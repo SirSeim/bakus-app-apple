@@ -7,8 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D3D1B5C29527A74007B9CB3 /* AdditionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B5B29527A74007B9CB3 /* AdditionData.swift */; };
+		0D3D1B5E29527AA1007B9CB3 /* Addition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B5D29527AA1007B9CB3 /* Addition.swift */; };
+		0D3D1B6029527AD5007B9CB3 /* KeychainHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B5F29527AD5007B9CB3 /* KeychainHelper.swift */; };
+		0D3D1B6229527B53007B9CB3 /* KeyValueRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6129527B53007B9CB3 /* KeyValueRow.swift */; };
+		0D3D1B6429527BB1007B9CB3 /* ProfileData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6329527BB1007B9CB3 /* ProfileData.swift */; };
+		0D3D1B6629527BD9007B9CB3 /* ProgressCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6529527BD9007B9CB3 /* ProgressCircle.swift */; };
+		0D3D1B6829527BFF007B9CB3 /* ApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6729527BFF007B9CB3 /* ApiManager.swift */; };
+		0D3D1B6A29527C38007B9CB3 /* ProfileSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6929527C38007B9CB3 /* ProfileSheet.swift */; };
+		0D3D1B6C29527CF6007B9CB3 /* AdditionList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6B29527CF6007B9CB3 /* AdditionList.swift */; };
+		0D3D1B6E29527D10007B9CB3 /* AdditionRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B6D29527D10007B9CB3 /* AdditionRow.swift */; };
 		0DB08720295246A100430156 /* BakusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0871F295246A100430156 /* BakusApp.swift */; };
-		0DB08722295246A100430156 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB08721295246A100430156 /* ContentView.swift */; };
 		0DB08724295246A300430156 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB08723295246A300430156 /* Assets.xcassets */; };
 		0DB08728295246A300430156 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB08727295246A300430156 /* Preview Assets.xcassets */; };
 		0DB08732295246A300430156 /* BakusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB08731295246A300430156 /* BakusTests.swift */; };
@@ -34,9 +43,19 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0D3D1B5B29527A74007B9CB3 /* AdditionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionData.swift; sourceTree = "<group>"; };
+		0D3D1B5D29527AA1007B9CB3 /* Addition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Addition.swift; sourceTree = "<group>"; };
+		0D3D1B5F29527AD5007B9CB3 /* KeychainHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainHelper.swift; sourceTree = "<group>"; };
+		0D3D1B6129527B53007B9CB3 /* KeyValueRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyValueRow.swift; sourceTree = "<group>"; };
+		0D3D1B6329527BB1007B9CB3 /* ProfileData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileData.swift; sourceTree = "<group>"; };
+		0D3D1B6529527BD9007B9CB3 /* ProgressCircle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressCircle.swift; sourceTree = "<group>"; };
+		0D3D1B6729527BFF007B9CB3 /* ApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiManager.swift; sourceTree = "<group>"; };
+		0D3D1B6929527C38007B9CB3 /* ProfileSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSheet.swift; sourceTree = "<group>"; };
+		0D3D1B6B29527CF6007B9CB3 /* AdditionList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionList.swift; sourceTree = "<group>"; };
+		0D3D1B6D29527D10007B9CB3 /* AdditionRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionRow.swift; sourceTree = "<group>"; };
+		0D3D1B6F29551B85007B9CB3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		0DB0871C295246A100430156 /* Bakus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB0871F295246A100430156 /* BakusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusApp.swift; sourceTree = "<group>"; };
-		0DB08721295246A100430156 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0DB08723295246A300430156 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0DB08725295246A300430156 /* Bakus.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bakus.entitlements; sourceTree = "<group>"; };
 		0DB08727295246A300430156 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -72,6 +91,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D3D1B5A29527A40007B9CB3 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0D3D1B5D29527AA1007B9CB3 /* Addition.swift */,
+				0D3D1B5B29527A74007B9CB3 /* AdditionData.swift */,
+				0D3D1B6D29527D10007B9CB3 /* AdditionRow.swift */,
+				0D3D1B6B29527CF6007B9CB3 /* AdditionList.swift */,
+				0DB0871F295246A100430156 /* BakusApp.swift */,
+				0D3D1B5F29527AD5007B9CB3 /* KeychainHelper.swift */,
+				0D3D1B6129527B53007B9CB3 /* KeyValueRow.swift */,
+				0D3D1B6329527BB1007B9CB3 /* ProfileData.swift */,
+				0D3D1B6529527BD9007B9CB3 /* ProgressCircle.swift */,
+				0D3D1B6729527BFF007B9CB3 /* ApiManager.swift */,
+				0D3D1B6929527C38007B9CB3 /* ProfileSheet.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		0DB08713295246A100430156 = {
 			isa = PBXGroup;
 			children = (
@@ -95,8 +132,8 @@
 		0DB0871E295246A100430156 /* Bakus */ = {
 			isa = PBXGroup;
 			children = (
-				0DB0871F295246A100430156 /* BakusApp.swift */,
-				0DB08721295246A100430156 /* ContentView.swift */,
+				0D3D1B6F29551B85007B9CB3 /* Info.plist */,
+				0D3D1B5A29527A40007B9CB3 /* App */,
 				0DB08723295246A300430156 /* Assets.xcassets */,
 				0DB08725295246A300430156 /* Bakus.entitlements */,
 				0DB08726295246A300430156 /* Preview Content */,
@@ -259,8 +296,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0DB08722295246A100430156 /* ContentView.swift in Sources */,
+				0D3D1B6229527B53007B9CB3 /* KeyValueRow.swift in Sources */,
+				0D3D1B6829527BFF007B9CB3 /* ApiManager.swift in Sources */,
+				0D3D1B6C29527CF6007B9CB3 /* AdditionList.swift in Sources */,
+				0D3D1B6E29527D10007B9CB3 /* AdditionRow.swift in Sources */,
+				0D3D1B6429527BB1007B9CB3 /* ProfileData.swift in Sources */,
+				0D3D1B5E29527AA1007B9CB3 /* Addition.swift in Sources */,
+				0D3D1B5C29527A74007B9CB3 /* AdditionData.swift in Sources */,
+				0D3D1B6029527AD5007B9CB3 /* KeychainHelper.swift in Sources */,
+				0D3D1B6629527BD9007B9CB3 /* ProgressCircle.swift in Sources */,
 				0DB08720295246A100430156 /* BakusApp.swift in Sources */,
+				0D3D1B6A29527C38007B9CB3 /* ProfileSheet.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -421,6 +467,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bakus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bakus;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -463,6 +510,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Bakus/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bakus;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
