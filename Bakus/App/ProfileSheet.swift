@@ -83,6 +83,9 @@ struct ProfileSheet: View {
             }
             .padding(30)
             .navigationTitle("Account")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
             .frame(minWidth: 400)
             .onAppear {
                 Task {

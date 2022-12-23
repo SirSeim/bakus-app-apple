@@ -5,6 +5,10 @@ struct LoginPayload: Codable {
     var password: String
 }
 
+struct LinkPayload: Codable {
+    var magnetLink: String
+}
+
 struct LoginSuccess: Codable {
     var expiry: Date
     var token: String
@@ -248,6 +252,16 @@ class ApiManager {
             return try await getData(urlString: "/api/v1/auth/account/")
         } catch {
             print("failed to get profile: \(error)")
+            return nil
+        }
+    }
+
+    func addAddition(link: String) async -> Addition? {
+        let payload = LinkPayload(magnetLink: link)
+        do {
+            return try await postData(urlString: "/api/v1/addition/", data: payload)
+        } catch {
+            print("failed to add addition: \(error)")
             return nil
         }
     }

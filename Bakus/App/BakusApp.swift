@@ -7,12 +7,13 @@ struct BakusApp: App {
     private let apiManager = ApiManager()
     
     @State private var showProfile = false
+    @State private var showAdd = false
     @State private var refresh = false
     
     var body: some Scene {
         WindowGroup {
             NavigationSplitView {
-                AdditionList(apiManager: apiManager, showProfile: $showProfile, refresh: $refresh)
+                AdditionList(apiManager: apiManager, showProfile: $showProfile, showAdd: $showAdd, refresh: $refresh)
             } detail: {
                 Text("Select an Addition")
                     .foregroundStyle(.secondary)
@@ -26,6 +27,11 @@ struct BakusApp: App {
                 Button("Account") {
                     showProfile = true
                 }.keyboardShortcut(",")
+            }
+            CommandGroup(before: .newItem) {
+                Button("Add Addition") {
+                    showAdd = true
+                }.keyboardShortcut("n")
             }
             CommandGroup(before: .toolbar) {
                 Button("Refresh") {

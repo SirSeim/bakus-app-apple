@@ -6,6 +6,7 @@ struct AdditionList: View {
     let apiManager: ApiManager
     
     @Binding var showProfile: Bool
+    @Binding var showAdd: Bool
     @Binding var refresh: Bool
     
     func refreshAdditions() async {
@@ -49,6 +50,13 @@ struct AdditionList: View {
             refresh = false
         }
         .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showAdd.toggle()
+                } label: {
+                    Label("Add", systemImage: "plus")
+                }
+            }
             #if os(iOS)
             ToolbarItem(placement: .bottomBar) {
                 Button {
@@ -84,15 +92,19 @@ struct AdditionList: View {
         .sheet(isPresented: $showProfile) {
             ProfileSheet(apiManager: apiManager)
         }
+        .sheet(isPresented: $showAdd) {
+            AdditionAdd(apiManager: apiManager)
+        }
     }
 }
 
 struct AdditionList_Previews: PreviewProvider {
     @State static var showProfile = false
+    @State static var showAdd = false
     @State static var refresh = false
     static var previews: some View {
         NavigationSplitView {
-            AdditionList(apiManager: ApiManager(), showProfile: $showProfile, refresh: $refresh)
+            AdditionList(apiManager: ApiManager(), showProfile: $showProfile, showAdd: $showAdd, refresh: $refresh)
                 .environmentObject(AdditionData.example())
                 .environmentObject(ProfileData.example())
         } detail: {
