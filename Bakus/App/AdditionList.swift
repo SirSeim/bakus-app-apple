@@ -32,7 +32,9 @@ struct AdditionList: View {
     
     var body: some View {
         List(additionData.additions) { addition in
-            AdditionRow(addition: addition)
+            NavigationLink(value: addition) {
+                AdditionRow(addition: addition)
+            }
         }
         .navigationTitle("Additions")
         .onAppear {
@@ -48,6 +50,9 @@ struct AdditionList: View {
             refresh = true
             await refreshAdditions()
             refresh = false
+        }
+        .navigationDestination(for: Addition.self) { addition in
+            AdditionDetail(addition: addition)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

@@ -1,10 +1,10 @@
 import SwiftUI
 
 struct ProgressCircle: View {
-    @State var progress: Double
-    @State var state: AdditionState
-    @State var showBig = false
-    
+    var progress: Double
+    var state: AdditionState
+    var showBig = false
+
     var body: some View {
         if state == .Completed {
             ZStack {

@@ -15,9 +15,24 @@ enum AdditionState : String, Codable {
 }
 
 
-struct File: Codable, Hashable {
+struct File: Codable, Identifiable, Hashable {
+    var id: String
+    
     var name: String
     var fileType: FileType
+    
+    init(name: String, fileType: FileType) {
+        self.id = name
+        self.name = name
+        self.fileType = fileType
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.id = self.name
+        self.fileType = try container.decode(FileType.self, forKey: .fileType)
+    }
 }
 
 
