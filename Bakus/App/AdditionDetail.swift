@@ -18,6 +18,11 @@ struct AdditionDetail: View {
                     Text("\(NSString(format: "%.1f", addition.progress * 100))% Downloaded")
                 }
                 Spacer()
+                if addition.state == .Completed {
+                    NavigationLink("Start Rename") {
+                        StartRename(addition: addition)
+                    }
+                }
             }
             List(addition.files) { file in
                 FileRow(file: file)
