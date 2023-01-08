@@ -25,6 +25,18 @@ let movieFind = Regex {
 }
 .anchorsMatchLineEndings()
 
+struct SubtitleChoice: Identifiable {
+    var id: String
+
+    var name: String
+    var language: Language
+
+    init(name: String, language: Language) {
+        self.id = name
+        self.name = name
+        self.language = language
+    }
+}
 
 struct MovieRenameStepOne: View {
     var addition: Addition
@@ -33,31 +45,46 @@ struct MovieRenameStepOne: View {
     
     @State var title = ""
     @ObservedObject var year = NumbersOnly()
+    @State var mainFile = File(name: "", fileType: .Video)
+    @State var subtitles = [SubtitleChoice]()
 
     var body: some View {
-        VStack {
-            Form {
-                Section(header: Text("Title")) {
-                    Text("Original Title: \(addition.name)")
-                        .foregroundColor(.secondary)
-                    HStack {
-                        Text("Title")
-                        TextField("", text: $title)
-                    }
-                    HStack {
-                        Text("Year")
-                        TextField("", text: $year.value)
-                        #if os(iOS)
-                            .keyboardType(.decimalPad)
-                        #endif
+        Form {
+            Section(header: Text("Movie")) {
+                Text("Original Title: \(addition.name)")
+                    .foregroundColor(.secondary)
+                Picker("File", selection: $mainFile) {
+                    ForEach(addition.videos()) { file in
+                        Text(file.name).tag(file)
                     }
                 }
-                Section(header: Text("Subtitles")) {
-                    Text("TBD")
+                HStack {
+                    Text("Title")
+                    TextField("", text: $title)
                 }
-                Section(header: Text("Featurettes")) {
-                    Text("TBD")
+                HStack {
+                    Text("Year")
+                    TextField("", text: $year.value)
+                    #if os(iOS)
+                        .keyboardType(.decimalPad)
+                    #endif
                 }
+            }
+            Section(header: Text("Subtitles")) {
+                ForEach(subtitles) { subtitle in
+                    HStack {
+                        Text(subtitle.name)
+//                        Spacer()
+//                        Picker(selection: subtitle.language) {
+//                            ForEach(Language.allCases) { language in
+//                                Text(language).tag(language)
+//                            }
+//                        }
+                    }
+                }
+            }
+            Section(header: Text("Featurettes")) {
+                Text("TBD")
             }
         }
         .navigationTitle("Rename Movie: Step 1")
@@ -73,6 +100,10 @@ struct MovieRenameStepOne: View {
                 .trimmingCharacters(in: .whitespacesAndNewlines)
                 
             year.value = String(match.output.2)
+            
+            for file in addition.subtitles() {
+                subtitles.append(SubtitleChoice(name: file.name, language: .English))
+            }
         }
     }
 }

@@ -33,6 +33,10 @@ struct File: Codable, Identifiable, Hashable {
         self.id = self.name
         self.fileType = try container.decode(FileType.self, forKey: .fileType)
     }
+
+    func isType(filter: FileType) -> Bool {
+        return self.fileType == filter
+    }
 }
 
 
@@ -43,6 +47,14 @@ struct Addition: Codable, Identifiable, Hashable {
     var name: String
     var progress: Double
     var files: [File]
+
+    func videos() -> [File] {
+        return self.files.filter({ $0.isType(filter: .Video) })
+    }
+
+    func subtitles() -> [File] {
+        return self.files.filter({ $0.isType(filter: .Subtitle) })
+    }
     
     static var example = Addition(
         id: "101",
@@ -51,6 +63,9 @@ struct Addition: Codable, Identifiable, Hashable {
         progress: 0.5,
         files: [
             File(name: "The_Thing.mp4", fileType: .Video),
+            File(name: "feature.mp4", fileType: .Video),
+            File(name: "sub.en.srt", fileType: .Subtitle),
+            File(name: "sub.es.srt", fileType: .Subtitle),
         ]
     )
 }
