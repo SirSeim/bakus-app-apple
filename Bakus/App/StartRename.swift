@@ -8,7 +8,7 @@ struct StartRename: View {
             Text("What type of Addition is this?")
             HStack {
                 NavigationLink("Movie") {
-                    MovieRenameStepOne(addition: addition)
+                    MovieRename(addition: addition)
                 }
                 Button("TV Show") {}
                     .disabled(true)

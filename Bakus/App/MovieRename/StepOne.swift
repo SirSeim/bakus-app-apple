@@ -13,18 +13,6 @@ class NumbersOnly: ObservableObject {
     }
 }
 
-let movieFind = Regex {
-  Capture {
-    OneOrMore(.digit.inverted)
-  }
-  Capture {
-    Repeat(count: 4) {
-      One(.digit)
-    }
-  }
-}
-.anchorsMatchLineEndings()
-
 struct SubtitleChoice: Identifiable {
     var id: String
 
@@ -38,10 +26,21 @@ struct SubtitleChoice: Identifiable {
     }
 }
 
-struct MovieRenameStepOne: View {
+struct MovieRename: View {
     var addition: Addition
     
     let spaceReplacements = #"[\s()._-]"#
+    let movieFind = Regex {
+      Capture {
+        OneOrMore(.digit.inverted)
+      }
+      Capture {
+        Repeat(count: 4) {
+          One(.digit)
+        }
+      }
+    }
+    .anchorsMatchLineEndings()
     
     @State var title = ""
     @ObservedObject var year = NumbersOnly()
@@ -51,8 +50,7 @@ struct MovieRenameStepOne: View {
     var body: some View {
         Form {
             Section(header: Text("Movie")) {
-                Text("Original Title: \(addition.name)")
-                    .foregroundColor(.secondary)
+                LabeledContent("Original Title", value: addition.name)
                 Picker("File", selection: $mainFile) {
                     ForEach(addition.videos()) { file in
                         Text(file.name).tag(file)
@@ -60,10 +58,12 @@ struct MovieRenameStepOne: View {
                 }
                 HStack {
                     Text("Title")
+                    Spacer()
                     TextField("", text: $title)
                 }
                 HStack {
                     Text("Year")
+                    Spacer()
                     TextField("", text: $year.value)
                     #if os(iOS)
                         .keyboardType(.decimalPad)
@@ -71,45 +71,51 @@ struct MovieRenameStepOne: View {
                 }
             }
             Section(header: Text("Subtitles")) {
-                ForEach(subtitles) { subtitle in
-                    HStack {
-                        Text(subtitle.name)
-//                        Spacer()
-//                        Picker(selection: subtitle.language) {
-//                            ForEach(Language.allCases) { language in
-//                                Text(language).tag(language)
-//                            }
-//                        }
+                if subtitles.count == 0 {
+                    Text("None").foregroundColor(.secondary)
+                } else {
+                    ForEach($subtitles) { $subtitle in
+                        Picker(subtitle.name, selection: $subtitle.language) {
+                            ForEach(Language.allCases) { language in
+                                Text(language.rawValue).tag(language)
+                            }
+                        }
                     }
                 }
             }
             Section(header: Text("Featurettes")) {
-                Text("TBD")
+                Text("Coming Soon!!").foregroundColor(.secondary)
             }
         }
-        .navigationTitle("Rename Movie: Step 1")
+        .navigationTitle("Rename Movie")
         .padding(20)
+        .formStyle(.grouped)
         .onAppear {
-            let movie = addition.name
-            guard let match = movie.firstMatch(of: movieFind) else {
-                return
+            // Populate file picker
+            let videos = addition.videos()
+            if videos.count != 0 {
+                mainFile = videos[0]
             }
             
-            title = String(match.output.1)
-                .replacingOccurrences(of: spaceReplacements, with: " ", options: .regularExpression, range: nil)
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                
-            year.value = String(match.output.2)
-            
+            // Generate subtitle list
             for file in addition.subtitles() {
                 subtitles.append(SubtitleChoice(name: file.name, language: .English))
             }
+            
+            // Populate Title and Year
+            guard let match = addition.name.firstMatch(of: movieFind) else {
+                return
+            }
+            title = String(match.output.1)
+                .replacingOccurrences(of: spaceReplacements, with: " ", options: .regularExpression, range: nil)
+                .trimmingCharacters(in: .whitespacesAndNewlines)
+            year.value = String(match.output.2)
         }
     }
 }
 
 struct MovieRenameStepOne_Previews: PreviewProvider {
     static var previews: some View {
-        MovieRenameStepOne(addition: Addition.example)
+        MovieRename(addition: Addition.example)
     }
 }
