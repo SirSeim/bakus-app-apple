@@ -68,4 +68,17 @@ struct Addition: Codable, Identifiable, Hashable {
             File(name: "sub.es.srt", fileType: .Subtitle),
         ]
     )
+    
+    static var exampleComplete = Addition(
+        id: "201",
+        state: .Completed,
+        name: "The Day the Earth Stood Still (1951)",
+        progress: 1.0,
+        files: [
+            File(name: "the_day_the_earth_stood_still_1951.mp4", fileType: .Video),
+            File(name: "feature.mp4", fileType: .Video),
+            File(name: "sub.en.srt", fileType: .Subtitle),
+            File(name: "sub.es.srt", fileType: .Subtitle),
+        ]
+    )
 }

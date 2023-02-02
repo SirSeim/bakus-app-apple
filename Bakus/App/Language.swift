@@ -62,4 +62,67 @@ enum Language : String, CaseIterable, Identifiable {
 //    case Turkish    = "tr"
     
     var id: Self {self}
+
+    func isoCode() -> String {
+        switch self {
+        case .Arabic:
+            return "ar"
+        case .Chinese:
+            return "zh"
+        case .Czech:
+            return "cs"
+        case .Danish:
+            return "da"
+        case .Dutch:
+            return "nl"
+        case .English:
+            return "en"
+        case .French:
+            return "fr"
+        case .German:
+            return "de"
+        case .Greek:
+            return "el"
+        case .Hebrew:
+            return "he"
+        case .Hindi:
+            return "hi"
+        case .Icelandic:
+            return "is"
+        case .Indonesian:
+            return "id"
+        case .Irish:
+            return "ga"
+        case .Italian:
+            return "it"
+        case .Japanese:
+            return "ja"
+        case .Korean:
+            return "ko"
+        case .Latin:
+            return "la"
+        case .Norwegian:
+            return "no"
+        case .Persian:
+            return "fa"
+        case .Polish:
+            return "pl"
+        case .Portuguese:
+            return "pt"
+        case .Russian:
+            return "ru"
+        case .Spanish:
+            return "es"
+        case .Swedish:
+            return "sv"
+        case .Tagalog:
+            return "tl"
+        case .Tahitian:
+            return "ty"
+        case .Thai:
+            return "th"
+        case .Turkish:
+            return "tr"
+        }
+    }
 }

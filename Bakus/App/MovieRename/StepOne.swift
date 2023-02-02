@@ -86,6 +86,19 @@ struct MovieRename: View {
             Section(header: Text("Featurettes")) {
                 Text("Coming Soon!!").foregroundColor(.secondary)
             }
+            NavigationLink("View Summary") {
+                // TODO: Figure this out
+//                let formattedTitle = "\(title) (\(year.value))"
+//                var renames: [FileRename] = []
+//                renames.append(FileRename(originalName: mainFile.name, newName: "\(formattedTitle).\(getFileExtension(file: mainFile.name))"))
+//
+//                for sub in subtitles {
+//                    renames.append(FileRename(originalName: sub.name, title: formattedTitle, subtitle: sub))
+//                }
+//                Summary(addition: addition, renames: renames)
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
         }
         .navigationTitle("Rename Movie")
         .padding(20)

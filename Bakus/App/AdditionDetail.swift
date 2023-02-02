@@ -22,6 +22,7 @@ struct AdditionDetail: View {
                     NavigationLink("Start Rename") {
                         StartRename(addition: addition)
                     }
+                    .buttonStyle(.bordered)
                 }
             }
             List(addition.files) { file in
@@ -37,5 +38,6 @@ struct AdditionDetail: View {
 struct AdditionDetail_Previews: PreviewProvider {
     static var previews: some View {
         AdditionDetail(addition: Addition.example)
+        AdditionDetail(addition: Addition.exampleComplete)
     }
 }

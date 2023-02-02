@@ -29,6 +29,7 @@
 		0DB08732295246A300430156 /* BakusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB08731295246A300430156 /* BakusTests.swift */; };
 		0DB0873C295246A300430156 /* BakusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0873B295246A300430156 /* BakusUITests.swift */; };
 		0DB0873E295246A300430156 /* BakusUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0873D295246A300430156 /* BakusUITestsLaunchTests.swift */; };
+		0DF5CCF3298BFDD900332D22 /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5CCF2298BFDD900332D22 /* Summary.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		0DB08737295246A300430156 /* BakusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BakusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB0873B295246A300430156 /* BakusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusUITests.swift; sourceTree = "<group>"; };
 		0DB0873D295246A300430156 /* BakusUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		0DF5CCF2298BFDD900332D22 /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				0D910EFB295B699F003C8E9C /* StepOne.swift */,
+				0DF5CCF2298BFDD900332D22 /* Summary.swift */,
 			);
 			path = MovieRename;
 			sourceTree = "<group>";
@@ -332,6 +335,7 @@
 				0D3D1B7329562491007B9CB3 /* AdditionDetail.swift in Sources */,
 				0D79ACA8296B5CD400D88124 /* Language.swift in Sources */,
 				0D3D1B7129553A43007B9CB3 /* AdditionAdd.swift in Sources */,
+				0DF5CCF3298BFDD900332D22 /* Summary.swift in Sources */,
 				0D3D1B5E29527AA1007B9CB3 /* Addition.swift in Sources */,
 				0D3D1B752956A6E6007B9CB3 /* FileRow.swift in Sources */,
 				0D3D1B5C29527A74007B9CB3 /* AdditionData.swift in Sources */,
