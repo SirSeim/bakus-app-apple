@@ -7,6 +7,18 @@ struct AdditionResults: Codable {
 class AdditionData: ObservableObject {
     @Published var additions: [Addition] = []
     
+    func remove(id: String) {
+        var index: Int? = nil
+        for (i, addition) in additions.enumerated() {
+            if addition.id == id {
+                index = i
+            }
+        }
+        if let index {
+            additions.remove(at: index)
+        }
+    }
+    
     static func example() -> AdditionData {
         let data = AdditionData()
         data.additions = [

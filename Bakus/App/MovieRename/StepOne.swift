@@ -1,15 +1,30 @@
 import SwiftUI
 import RegexBuilder
 
-class NumbersOnly: ObservableObject {
-    @Published var value = "" {
+class TitleRename: ObservableObject, CustomStringConvertible {
+    @Published var name : String
+    @Published var year : String {
         didSet {
-            let filtered = value.filter { $0.isNumber }
+            let filtered = year.filter { $0.isNumber }
             
-            if value != filtered {
-                value = filtered
+            if year != filtered {
+                year = filtered
             }
         }
+    }
+    
+    init() {
+        name = ""
+        year = ""
+    }
+    
+    init(name: String, year: Int) {
+        self.name = name
+        self.year = String(year)
+    }
+    
+    var description: String {
+        return "\(name) (\(year))"
     }
 }
 
@@ -42,10 +57,27 @@ struct MovieRename: View {
     }
     .anchorsMatchLineEndings()
     
-    @State var title = ""
-    @ObservedObject var year = NumbersOnly()
+    @State var title = TitleRename()
     @State var mainFile = File(name: "", fileType: .Video)
-    @State var subtitles = [SubtitleChoice]()
+    @State var subtitles: [SubtitleChoice] = []
+
+    func fileRenames() -> [FileRename] {
+        var newFiles : [FileRename] = []
+        
+        // Add mainFile
+        newFiles.append(FileRename(
+            originalName: mainFile.name,
+            newName: "\(title).\(getFileExtension(file: mainFile.name))"
+        ))
+        
+        // Add subtitles
+        for subtitle in subtitles {
+            newFiles.append(FileRename(title: title, subtitle: subtitle))
+        }
+        
+        // Add featurettes
+        return newFiles
+    }
 
     var body: some View {
         Form {
@@ -59,12 +91,12 @@ struct MovieRename: View {
                 HStack {
                     Text("Title")
                     Spacer()
-                    TextField("", text: $title)
+                    TextField("", text: $title.name)
                 }
                 HStack {
                     Text("Year")
                     Spacer()
-                    TextField("", text: $year.value)
+                    TextField("", text: $title.year)
                     #if os(iOS)
                         .keyboardType(.decimalPad)
                     #endif
@@ -87,18 +119,13 @@ struct MovieRename: View {
                 Text("Coming Soon!!").foregroundColor(.secondary)
             }
             NavigationLink("View Summary") {
-                // TODO: Figure this out
-//                let formattedTitle = "\(title) (\(year.value))"
-//                var renames: [FileRename] = []
-//                renames.append(FileRename(originalName: mainFile.name, newName: "\(formattedTitle).\(getFileExtension(file: mainFile.name))"))
-//
-//                for sub in subtitles {
-//                    renames.append(FileRename(originalName: sub.name, title: formattedTitle, subtitle: sub))
-//                }
-//                Summary(addition: addition, renames: renames)
+                Summary(
+                    addition: addition,
+                    titleRename: title,
+                    // TODO: get fileRenames to regenerate on changes
+                    renames: self.fileRenames()
+                )
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
         }
         .navigationTitle("Rename Movie")
         .padding(20)
@@ -119,10 +146,10 @@ struct MovieRename: View {
             guard let match = addition.name.firstMatch(of: movieFind) else {
                 return
             }
-            title = String(match.output.1)
+            title.name = String(match.output.1)
                 .replacingOccurrences(of: spaceReplacements, with: " ", options: .regularExpression, range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
-            year.value = String(match.output.2)
+            title.year = String(match.output.2)
         }
     }
 }

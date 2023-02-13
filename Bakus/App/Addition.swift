@@ -59,7 +59,7 @@ struct Addition: Codable, Identifiable, Hashable {
     static var example = Addition(
         id: "101",
         state: .Downloading,
-        name: "The Thing",
+        name: "The_Thing_(1982)",
         progress: 0.5,
         files: [
             File(name: "The_Thing.mp4", fileType: .Video),
@@ -72,7 +72,7 @@ struct Addition: Codable, Identifiable, Hashable {
     static var exampleComplete = Addition(
         id: "201",
         state: .Completed,
-        name: "The Day the Earth Stood Still (1951)",
+        name: "The_Day_the_Earth_Stood_Still_(1951)",
         progress: 1.0,
         files: [
             File(name: "the_day_the_earth_stood_still_1951.mp4", fileType: .Video),
