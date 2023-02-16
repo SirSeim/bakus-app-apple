@@ -52,7 +52,7 @@ struct AdditionList: View {
             refresh = false
         }
         .navigationDestination(for: Addition.self) { addition in
-            AdditionDetail(addition: addition)
+            AdditionDetail(addition: addition, apiManager: apiManager)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

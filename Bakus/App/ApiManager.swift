@@ -9,6 +9,12 @@ struct LinkPayload: Codable {
     var magnetLink: String
 }
 
+struct RenameMoviePayload: Codable {
+    var title: String
+    var deleteRest: Bool
+    var files: [FileRename]
+}
+
 struct LoginSuccess: Codable {
     var expiry: Date
     var token: String
@@ -262,6 +268,16 @@ class ApiManager {
             return try await postData(urlString: "/api/v1/addition/", data: payload)
         } catch {
             print("failed to add addition: \(error)")
+            return nil
+        }
+    }
+
+    func renameMovie(addition_id: String, title: String, deleteRest: Bool, files: [FileRename]) async -> RenameMoviePayload? {
+        let payload = RenameMoviePayload(title: title, deleteRest: deleteRest, files: files)
+        do {
+            return try await postData(urlString: "/api/v1/addition/\(addition_id)/rename-movie", data: payload)
+        } catch {
+            print("failed to rename movie: \(error)")
             return nil
         }
     }
