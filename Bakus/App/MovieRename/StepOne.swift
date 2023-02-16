@@ -28,7 +28,7 @@ class TitleRename: ObservableObject, CustomStringConvertible {
     }
 }
 
-struct SubtitleChoice: Identifiable {
+struct SubtitleChoice: Identifiable, Equatable {
     var id: String
 
     var name: String
@@ -61,23 +61,23 @@ struct MovieRename: View {
     @State var title = TitleRename()
     @State var mainFile = File(name: "", fileType: .Video)
     @State var subtitles: [SubtitleChoice] = []
+    @State var fileRenames: [FileRename] = []
 
-    func fileRenames() -> [FileRename] {
-        var newFiles : [FileRename] = []
-        
+    func refreshFileRenames() {
+        var newRenames: [FileRename] = []
         // Add mainFile
-        newFiles.append(FileRename(
+        newRenames.append(FileRename(
             originalName: mainFile.name,
             newName: "\(title).\(getFileExtension(file: mainFile.name))"
         ))
         
         // Add subtitles
         for subtitle in subtitles {
-            newFiles.append(FileRename(title: title, subtitle: subtitle))
+            newRenames.append(FileRename(title: title, subtitle: subtitle))
         }
         
-        // Add featurettes
-        return newFiles
+        // TODO: Add featurettes
+        fileRenames = newRenames
     }
 
     var body: some View {
@@ -124,8 +124,7 @@ struct MovieRename: View {
                     addition: addition,
                     apiManager: apiManager,
                     titleRename: title,
-                    // TODO: get fileRenames to regenerate on changes
-                    renames: self.fileRenames()
+                    renames: fileRenames
                 )
             }
         }
@@ -152,6 +151,18 @@ struct MovieRename: View {
                 .replacingOccurrences(of: spaceReplacements, with: " ", options: .regularExpression, range: nil)
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             title.year = String(match.output.2)
+        }
+        .onReceive(title.objectWillChange) {_ in
+            print("refreshing from title")
+            refreshFileRenames()
+        }
+        .onChange(of: mainFile) {_ in
+            print("refreshing from mainFile")
+            refreshFileRenames()
+        }
+        .onChange(of: subtitles) {_ in
+            print("refreshing from subtitles")
+            refreshFileRenames()
         }
     }
 }
