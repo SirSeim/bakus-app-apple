@@ -129,7 +129,6 @@ struct MovieRename: View {
             }
         }
         .navigationTitle("Rename Movie")
-        .padding(20)
         .formStyle(.grouped)
         .onAppear {
             // Populate file picker
