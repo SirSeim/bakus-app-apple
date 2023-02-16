@@ -43,6 +43,7 @@ struct SubtitleChoice: Identifiable {
 
 struct MovieRename: View {
     var addition: Addition
+    var apiManager: ApiManager
     
     let spaceReplacements = #"[\s()._-]"#
     let movieFind = Regex {
@@ -121,6 +122,7 @@ struct MovieRename: View {
             NavigationLink("View Summary") {
                 Summary(
                     addition: addition,
+                    apiManager: apiManager,
                     titleRename: title,
                     // TODO: get fileRenames to regenerate on changes
                     renames: self.fileRenames()
@@ -156,6 +158,6 @@ struct MovieRename: View {
 
 struct MovieRenameStepOne_Previews: PreviewProvider {
     static var previews: some View {
-        MovieRename(addition: Addition.example)
+        MovieRename(addition: Addition.example, apiManager: ApiManager())
     }
 }

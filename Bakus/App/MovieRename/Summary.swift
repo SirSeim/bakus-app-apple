@@ -3,18 +3,18 @@ import SwiftUI
 struct FileRename: Identifiable, Codable {
     var id: String
     
-    var originalName: String
+    var currentName: String
     var newName: String
 
     init(originalName: String, newName: String) {
         self.id = originalName
-        self.originalName = originalName
+        self.currentName = originalName
         self.newName = newName
     }
     
     init(title: TitleRename, subtitle: SubtitleChoice) {
         self.id = subtitle.name
-        self.originalName = subtitle.name
+        self.currentName = subtitle.name
         let ext = (subtitle.name as NSString).pathExtension
         self.newName = "\(title).\(subtitle.language.isoCode()).\(ext)"
     }
@@ -28,9 +28,13 @@ struct Summary: View {
     @EnvironmentObject var additionData: AdditionData
 
     var addition: Addition
+    var apiManager: ApiManager
     var titleRename: TitleRename
+    @State var deleteRest = false
     @State var renames: [FileRename]
+    @State var untouchedFiles: [File] = []
     
+    @State var doingRename = false
     @State var doneRename = false
 
     var body: some View {
@@ -42,7 +46,7 @@ struct Summary: View {
                     ForEach($renames) { $rename in
                         VStack {
                             HStack {
-                                Text(rename.originalName)
+                                Text(rename.currentName)
                                 Spacer()
                             }
                             HStack {
@@ -52,14 +56,55 @@ struct Summary: View {
                         }
                     }
                 }
-                Button("Submit Rename") {
-                    print("doing stuff")
-                    additionData.remove(id: addition.id)
-                    doneRename = true
+                Section("Untouched Files") {
+                    Toggle(isOn: $deleteRest) {
+                        Text("Delete Untouched Files")
+                    }
+                    ForEach(untouchedFiles) { untouchedFile in
+                        HStack {
+                            if deleteRest {
+                                Label("", systemImage: "multiply.circle")
+                                    .foregroundColor(.red)
+                            } else {
+                                Label("", systemImage: "minus.circle")
+                                    .foregroundColor(.gray)
+                            }
+                            FileRow(file: untouchedFile)
+                        }
+                    }
                 }
+                Button("Rename Movie") {
+                    print("renaming movie")
+                    doingRename =  true
+                    
+                    Task {
+                        _ = await apiManager.renameMovie(addition_id: addition.id, title: titleRename.description, deleteRest: deleteRest, files: renames)
+                        
+                        print("rename movie request done")
+                        additionData.remove(id: addition.id)
+                        doingRename = false
+                        doneRename = true
+                    }
+                }
+                .disabled(doingRename)
             }
             .navigationTitle("Rename Summary")
             .formStyle(.grouped)
+            .onAppear {
+                for file in addition.files {
+                    var found = false
+                    for renamedFile in renames {
+                        if renamedFile.currentName == file.name {
+                            found = true
+                        }
+                    }
+                    if found {
+                        continue
+                    }
+                    print("file not in renames \(file.name)")
+                    untouchedFiles.append(file)
+                }
+            }
         } else {
             Text("Select an Addition")
                 .foregroundStyle(.secondary)
@@ -72,6 +117,7 @@ struct Summary_Previews: PreviewProvider {
     static var previews: some View {
         Summary(
             addition: Addition.exampleComplete,
+            apiManager: ApiManager(),
             titleRename: TitleRename(name: "The Day the Earth Stood Still", year: 1951),
             renames: [
                 FileRename(originalName: "old", newName: "new"),

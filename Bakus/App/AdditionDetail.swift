@@ -2,6 +2,7 @@ import SwiftUI
 
 struct AdditionDetail: View {
     var addition: Addition
+    var apiManager: ApiManager
 
     var body: some View {
         VStack {
@@ -19,7 +20,7 @@ struct AdditionDetail: View {
                 }
                 Spacer()
                 NavigationLink("Start Rename") {
-                    StartRename(addition: addition)
+                    StartRename(addition: addition, apiManager: apiManager)
                 }
                 .buttonStyle(.bordered)
                 .disabled(addition.state != .Completed)
@@ -36,7 +37,7 @@ struct AdditionDetail: View {
 
 struct AdditionDetail_Previews: PreviewProvider {
     static var previews: some View {
-        AdditionDetail(addition: Addition.example)
-        AdditionDetail(addition: Addition.exampleComplete)
+        AdditionDetail(addition: Addition.example, apiManager: ApiManager())
+        AdditionDetail(addition: Addition.exampleComplete, apiManager: ApiManager())
     }
 }
