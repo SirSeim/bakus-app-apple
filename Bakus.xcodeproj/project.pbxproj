@@ -497,7 +497,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bakus/Bakus.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Bakus/Preview Content\"";
 				DEVELOPMENT_TEAM = 7L9JHN5TMF;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -540,7 +540,7 @@
 				CODE_SIGN_ENTITLEMENTS = Bakus/Bakus.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Bakus/Preview Content\"";
 				DEVELOPMENT_TEAM = 7L9JHN5TMF;
 				ENABLE_HARDENED_RUNTIME = YES;
