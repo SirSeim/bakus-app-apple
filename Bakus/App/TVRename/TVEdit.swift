@@ -54,8 +54,7 @@ struct TVEdit: View {
     var addition: Addition
     var apiManager: ApiManager
     
-    @State var title = ""
-    @State var year = ""
+    @State var title = TitleRename()
     @State var season = ""
     
     @State var episodes: [EpisodeChoice] = []
@@ -120,13 +119,13 @@ struct TVEdit: View {
                 HStack {
                     Text("Title")
                     Spacer()
-                    TextField("", text: $title)
+                    TextField("", text: $title.name)
                         .multilineTextAlignment(.trailing)
                 }
                 HStack {
                     Text("Year")
                     Spacer()
-                    TextField("", text: $year)
+                    TextField("", text: $title.year)
                         .multilineTextAlignment(.trailing)
                     #if os(iOS)
                         .keyboardType(.decimalPad)
@@ -267,10 +266,10 @@ struct TVEdit: View {
             
             // Populate Show Details
             if let match = addition.name.firstMatch(of: showFind) {
-                title = String(match.output.1)
+                title.name = String(match.output.1)
                     .replacingOccurrences(of: spaceReplacements, with: " ", options: .regularExpression, range: nil)
                     .trimmingCharacters(in: .whitespacesAndNewlines)
-                year = String(match.output.2)
+                title.year = String(match.output.2)
             }
         }
     }

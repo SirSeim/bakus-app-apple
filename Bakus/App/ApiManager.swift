@@ -15,6 +15,13 @@ struct RenameMoviePayload: Codable {
     var files: [FileRename]
 }
 
+struct RenameTVPayload: Codable {
+    var title: String
+    var season: Int
+    var deleteRest: Bool
+    var files: [FileRename]
+}
+
 struct LoginSuccess: Codable {
     var expiry: Date
     var token: String
@@ -278,6 +285,16 @@ class ApiManager {
             return try await postData(urlString: "/api/v1/addition/\(addition_id)/rename-movie", data: payload)
         } catch {
             print("failed to rename movie: \(error)")
+            return nil
+        }
+    }
+    
+    func renameTV(addition_id: String, title: String, season: Int, deleteRest: Bool, files: [FileRename]) async -> RenameTVPayload? {
+        let payload = RenameTVPayload(title: title, season: season, deleteRest: deleteRest, files: files)
+        do {
+            return try await postData(urlString: "/api/v1/addition/\(addition_id)/rename-tv", data: payload)
+        } catch {
+            print("failed to rename tv: \(error)")
             return nil
         }
     }

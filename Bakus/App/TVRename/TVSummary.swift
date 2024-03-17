@@ -1,54 +1,34 @@
+//
+//  TVSummary.swift
+//  Bakus
+//
+//  Created by Edward Seim on 2024-03-17.
+//
+
 import SwiftUI
 
-struct FileRename: Identifiable, Codable {
-    var id: String
-    
-    var currentName: String
-    var newName: String
-
-    init(originalName: String, newName: String) {
-        self.id = originalName
-        self.currentName = originalName
-        self.newName = newName
-    }
-    
-    init(originalFile: String, newName: String) {
-        self.id = originalFile
-        self.currentName = originalFile
-        let ext = getFileExtension(file: originalFile)
-        self.newName = "\(newName).\(ext)"
-    }
-    
-    init(title: TitleRename, subtitle: SubtitleChoice) {
-        self.id = subtitle.name
-        self.currentName = subtitle.name
-        let ext = (subtitle.name as NSString).pathExtension
-        self.newName = "\(title).\(subtitle.language.isoCode()).\(ext)"
-    }
-}
-
-func getFileExtension(file: String) -> String {
-    return (file as NSString).pathExtension
-}
-
-struct Summary: View {
+struct TVSummary: View {
     @EnvironmentObject var additionData: AdditionData
-
+    
     var addition: Addition
     var apiManager: ApiManager
+    
     var titleRename: TitleRename
-    @State var deleteRest = false
+    var season: String
+    
     @State var renames: [FileRename]
+    @State var deleteRest = false
     @State var untouchedFiles: [File] = []
     
     @State var doingRename = false
     @State var doneRename = false
-
+    
     var body: some View {
         if !doneRename {
             Form {
                 LabeledContent("Original Title", value: addition.name)
                 LabeledContent("New Title", value: titleRename.description)
+                LabeledContent("Season", value: season)
                 Section("Files") {
                     ForEach($renames) { $rename in
                         VStack {
@@ -80,14 +60,20 @@ struct Summary: View {
                         }
                     }
                 }
-                Button("Rename Movie") {
-                    print("renaming movie")
+                Button("Rename TV Show") {
+                    print("renaming tv")
                     doingRename =  true
                     
+                    guard let seasonInt = Int(season) else {
+                        print("year must be int \(season)")
+                        // TODO: show actual error
+                        doingRename = false
+                        return
+                    }
                     Task {
-                        _ = await apiManager.renameMovie(addition_id: addition.id, title: titleRename.description, deleteRest: deleteRest, files: renames)
+                        _ = await apiManager.renameTV(addition_id: addition.id, title: titleRename.description, season: seasonInt, deleteRest: deleteRest, files: renames)
                         
-                        print("rename movie request done")
+                        print("rename tv request done")
                         additionData.remove(id: addition.id)
                         doingRename = false
                         doneRename = true
@@ -120,23 +106,15 @@ struct Summary: View {
     }
 }
 
-struct Summary_Previews: PreviewProvider {
-    static var previews: some View {
-        Summary(
-            addition: Addition.exampleComplete,
-            apiManager: ApiManager(),
-            titleRename: TitleRename(name: "The Day the Earth Stood Still", year: 1951),
-            renames: [
-                FileRename(originalName: "old", newName: "new"),
-                FileRename(
-                    title: TitleRename(name: "Video", year: 2001),
-                    subtitle: SubtitleChoice(name: "video.en.srt", language: .English)
-                ),
-                FileRename(
-                    title: TitleRename(name: "Video", year: 2001),
-                    subtitle: SubtitleChoice(name: "video.es.srt", language: .Spanish)
-                )
-            ]
-        )
-    }
+#Preview {
+    TVSummary(
+        addition: Addition.exampleTV,
+        apiManager: ApiManager(),
+        titleRename: TitleRename(name: "Mystery Science Theater 3000", year: 1988),
+        season: "1",
+        renames: [
+            FileRename(originalFile: "mst3k_s01e01-02.mov", newName: "mst3k - S01E01-02"),
+            FileRename(originalFile: "mst3k_s01e03_Real_Run.mp4", newName: "mst3k - S01E03 - Real Run")
+        ]
+    )
 }
