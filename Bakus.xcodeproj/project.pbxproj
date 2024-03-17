@@ -28,6 +28,7 @@
 		0DB08732295246A300430156 /* BakusTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB08731295246A300430156 /* BakusTests.swift */; };
 		0DB0873C295246A300430156 /* BakusUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0873B295246A300430156 /* BakusUITests.swift */; };
 		0DB0873E295246A300430156 /* BakusUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0873D295246A300430156 /* BakusUITestsLaunchTests.swift */; };
+		0DC215212BA678C000C50982 /* TVEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DC215202BA678C000C50982 /* TVEdit.swift */; };
 		0DF5CCF3298BFDD900332D22 /* Summary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DF5CCF2298BFDD900332D22 /* Summary.swift */; };
 /* End PBXBuildFile section */
 
@@ -75,6 +76,7 @@
 		0DB08737295246A300430156 /* BakusUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BakusUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB0873B295246A300430156 /* BakusUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusUITests.swift; sourceTree = "<group>"; };
 		0DB0873D295246A300430156 /* BakusUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		0DC215202BA678C000C50982 /* TVEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TVEdit.swift; sourceTree = "<group>"; };
 		0DF5CCF2298BFDD900332D22 /* Summary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Summary.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +108,7 @@
 		0D3D1B5A29527A40007B9CB3 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				0DC2151D2BA6786B00C50982 /* TVRename */,
 				0D910EFA295B697C003C8E9C /* MovieRename */,
 				0D3D1B5D29527AA1007B9CB3 /* Addition.swift */,
 				0D3D1B5B29527A74007B9CB3 /* AdditionData.swift */,
@@ -190,6 +193,14 @@
 				0DB0873D295246A300430156 /* BakusUITestsLaunchTests.swift */,
 			);
 			path = BakusUITests;
+			sourceTree = "<group>";
+		};
+		0DC2151D2BA6786B00C50982 /* TVRename */ = {
+			isa = PBXGroup;
+			children = (
+				0DC215202BA678C000C50982 /* TVEdit.swift */,
+			);
+			path = TVRename;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -335,6 +346,7 @@
 				0D3D1B5E29527AA1007B9CB3 /* Addition.swift in Sources */,
 				0D3D1B752956A6E6007B9CB3 /* FileRow.swift in Sources */,
 				0D3D1B5C29527A74007B9CB3 /* AdditionData.swift in Sources */,
+				0DC215212BA678C000C50982 /* TVEdit.swift in Sources */,
 				0D3D1B6029527AD5007B9CB3 /* KeychainHelper.swift in Sources */,
 				0D3D1B6629527BD9007B9CB3 /* ProgressCircle.swift in Sources */,
 				0DB08720295246A100430156 /* BakusApp.swift in Sources */,
