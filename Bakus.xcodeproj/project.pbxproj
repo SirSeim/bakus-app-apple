@@ -21,7 +21,6 @@
 		0D3D1B7329562491007B9CB3 /* AdditionDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B7229562491007B9CB3 /* AdditionDetail.swift */; };
 		0D3D1B752956A6E6007B9CB3 /* FileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D3D1B742956A6E6007B9CB3 /* FileRow.swift */; };
 		0D79ACA8296B5CD400D88124 /* Language.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D79ACA7296B5CD400D88124 /* Language.swift */; };
-		0D910EF9295B66C3003C8E9C /* StartRename.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D910EF8295B66C3003C8E9C /* StartRename.swift */; };
 		0D910EFC295B699F003C8E9C /* StepOne.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D910EFB295B699F003C8E9C /* StepOne.swift */; };
 		0DB08720295246A100430156 /* BakusApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0DB0871F295246A100430156 /* BakusApp.swift */; };
 		0DB08724295246A300430156 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0DB08723295246A300430156 /* Assets.xcassets */; };
@@ -65,7 +64,6 @@
 		0D3D1B7229562491007B9CB3 /* AdditionDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdditionDetail.swift; sourceTree = "<group>"; };
 		0D3D1B742956A6E6007B9CB3 /* FileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileRow.swift; sourceTree = "<group>"; };
 		0D79ACA7296B5CD400D88124 /* Language.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Language.swift; sourceTree = "<group>"; };
-		0D910EF8295B66C3003C8E9C /* StartRename.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartRename.swift; sourceTree = "<group>"; };
 		0D910EFB295B699F003C8E9C /* StepOne.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepOne.swift; sourceTree = "<group>"; };
 		0DB0871C295246A100430156 /* Bakus.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bakus.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DB0871F295246A100430156 /* BakusApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BakusApp.swift; sourceTree = "<group>"; };
@@ -123,7 +121,6 @@
 				0D3D1B7029553A43007B9CB3 /* AdditionAdd.swift */,
 				0D3D1B7229562491007B9CB3 /* AdditionDetail.swift */,
 				0D3D1B742956A6E6007B9CB3 /* FileRow.swift */,
-				0D910EF8295B66C3003C8E9C /* StartRename.swift */,
 				0D79ACA7296B5CD400D88124 /* Language.swift */,
 			);
 			path = App;
@@ -325,7 +322,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0D910EF9295B66C3003C8E9C /* StartRename.swift in Sources */,
 				0D3D1B6229527B53007B9CB3 /* KeyValueRow.swift in Sources */,
 				0D3D1B6829527BFF007B9CB3 /* ApiManager.swift in Sources */,
 				0D3D1B6C29527CF6007B9CB3 /* AdditionList.swift in Sources */,

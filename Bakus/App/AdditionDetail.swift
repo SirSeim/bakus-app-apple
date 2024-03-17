@@ -19,8 +19,14 @@ struct AdditionDetail: View {
                     Text("\(NSString(format: "%.1f", addition.progress * 100))% Downloaded")
                 }
                 Spacer()
-                NavigationLink("Start Rename") {
-                    StartRename(addition: addition, apiManager: apiManager)
+                Menu {
+                    NavigationLink("Movie") {
+                        MovieRename(addition: addition, apiManager: apiManager)
+                    }
+                    Button("TV Show") {}
+                        .disabled(true)
+                } label: {
+                    Text("Start Rename")
                 }
                 .buttonStyle(.bordered)
                 .disabled(addition.state != .Completed)
