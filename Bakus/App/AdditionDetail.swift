@@ -36,11 +36,15 @@ struct AdditionDetail: View {
                         }
                         Spacer()
                         Menu {
-                            Button("Movie") {
+                            Button {
                                 state = .MovieRename
+                            } label: {
+                                Label("Movie", systemImage: "movieclapper")
                             }
-                            Button("TV Show") {
+                            Button {
                                 state = .TVRename
+                            } label: {
+                                Label("TV Show", systemImage: "play.tv")
                             }
                         } label: {
                             Text("Start Rename")
