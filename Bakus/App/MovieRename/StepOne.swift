@@ -12,15 +12,32 @@ class TitleRename: ObservableObject, CustomStringConvertible {
             }
         }
     }
+    @Published var season : String {
+        didSet {
+            let filtered = year.filter { $0.isNumber }
+            
+            if year != filtered {
+                year = filtered
+            }
+        }
+    }
     
     init() {
         name = ""
         year = ""
+        season = ""
     }
     
     init(name: String, year: Int) {
         self.name = name
         self.year = String(year)
+        self.season = ""
+    }
+    
+    init(name: String, year: Int, season: Int) {
+        self.name = name
+        self.year = String(year)
+        self.season = String(season)
     }
     
     var description: String {
@@ -58,12 +75,15 @@ struct MovieRename: View {
     }
     .anchorsMatchLineEndings()
     
-    @State var title = TitleRename()
+    @Binding var state: RenameProcess
+    
+    @Binding var title: TitleRename
+    @Binding var fileRenames: [FileRename]
+    
     @State var mainFile = File(name: "", fileType: .Video)
     @State var subtitles: [SubtitleChoice] = []
-    @State var fileRenames: [FileRename] = []
 
-    func refreshFileRenames() {
+    func buildFileRenames() {
         var newRenames: [FileRename] = []
         // Add mainFile
         newRenames.append(FileRename(
@@ -119,13 +139,17 @@ struct MovieRename: View {
             Section(header: Text("Featurettes")) {
                 Text("Coming Soon!!").foregroundColor(.secondary)
             }
-            NavigationLink("View Summary") {
-                Summary(
-                    addition: addition,
-                    apiManager: apiManager,
-                    titleRename: title,
-                    renames: fileRenames
-                )
+            Button {
+                buildFileRenames()
+                state = .MovieSummary
+            } label: {
+                HStack {
+                    Text("Continue")
+                    #if os(iOS)
+                    Spacer()
+                    #endif
+                    Image(systemName: "chevron.right")
+                }
             }
         }
         .navigationTitle("Rename Movie")
@@ -151,23 +175,15 @@ struct MovieRename: View {
                 .trimmingCharacters(in: .whitespacesAndNewlines)
             title.year = String(match.output.2)
         }
-        .onReceive(title.objectWillChange) {_ in
-            print("refreshing from title")
-            refreshFileRenames()
-        }
-        .onChange(of: mainFile) {_ in
-            print("refreshing from mainFile")
-            refreshFileRenames()
-        }
-        .onChange(of: subtitles) {_ in
-            print("refreshing from subtitles")
-            refreshFileRenames()
-        }
     }
 }
 
-struct MovieRenameStepOne_Previews: PreviewProvider {
-    static var previews: some View {
-        MovieRename(addition: Addition.example, apiManager: ApiManager())
-    }
+#Preview {
+    MovieRename(
+        addition: Addition.example,
+        apiManager: ApiManager(),
+        state: .constant(.MovieRename),
+        title: .constant(TitleRename()),
+        fileRenames: .constant([])
+    )
 }

@@ -81,4 +81,17 @@ struct Addition: Codable, Identifiable, Hashable {
             File(name: "sub.es.srt", fileType: .Subtitle),
         ]
     )
+    
+    static var exampleTV = Addition(
+        id: "301",
+        state: .Completed,
+        name: "Mystery_Science_Theater_3000_(1988)_Season_01",
+        progress: 1.0,
+        files: [
+            File(name: "mst3k_s01e01-02.mov", fileType: .Video),
+            File(name: "mst3k_s01e03_Real_Run.mp4", fileType: .Video),
+            File(name: "mst3k_s2e1-2_Other.mov", fileType: .Video),
+            File(name: "mst3k_extra.mp4", fileType: .Video),
+        ]
+    )
 }

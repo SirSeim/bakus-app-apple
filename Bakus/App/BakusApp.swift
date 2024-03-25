@@ -6,6 +6,8 @@ struct BakusApp: App {
     @StateObject private var profileData = ProfileData()
     private let apiManager = ApiManager()
     
+    @State private var additionSelection: Addition.ID?
+    
     @State private var showProfile = false
     @State private var showAdd = false
     @State private var refresh = false
@@ -13,10 +15,19 @@ struct BakusApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationSplitView {
-                AdditionList(apiManager: apiManager, showProfile: $showProfile, showAdd: $showAdd, refresh: $refresh)
+                AdditionList(apiManager: apiManager, additionSelection: $additionSelection, showProfile: $showProfile, showAdd: $showAdd, refresh: $refresh)
             } detail: {
-                Text("Select an Addition")
-                    .foregroundStyle(.secondary)
+                if let selection = additionSelection {
+                    if let addition = additionData.get(id: selection) {
+                        AdditionDetail(addition: addition, apiManager: apiManager)
+                    } else {
+                        Text("Select an Addition...")
+                            .foregroundStyle(.secondary)
+                    }
+                } else {
+                    Text("Select an Addition")
+                        .foregroundStyle(.secondary)
+                }
             }
             .environmentObject(additionData)
             .environmentObject(profileData)

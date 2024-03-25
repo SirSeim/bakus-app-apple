@@ -5,6 +5,8 @@ struct AdditionList: View {
     @EnvironmentObject var profileData: ProfileData
     let apiManager: ApiManager
     
+    @Binding var additionSelection: Addition.ID?
+    
     @Binding var showProfile: Bool
     @Binding var showAdd: Bool
     @Binding var refresh: Bool
@@ -31,10 +33,8 @@ struct AdditionList: View {
     }
     
     var body: some View {
-        List(additionData.additions) { addition in
-            NavigationLink(value: addition) {
-                AdditionRow(addition: addition)
-            }
+        List(additionData.additions, selection: $additionSelection) { addition in
+            AdditionRow(addition: addition)
         }
         .navigationTitle("Additions")
         .onAppear {
@@ -50,9 +50,6 @@ struct AdditionList: View {
             refresh = true
             await refreshAdditions()
             refresh = false
-        }
-        .navigationDestination(for: Addition.self) { addition in
-            AdditionDetail(addition: addition, apiManager: apiManager)
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -103,17 +100,18 @@ struct AdditionList: View {
     }
 }
 
-struct AdditionList_Previews: PreviewProvider {
-    @State static var showProfile = false
-    @State static var showAdd = false
-    @State static var refresh = false
-    static var previews: some View {
-        NavigationSplitView {
-            AdditionList(apiManager: ApiManager(), showProfile: $showProfile, showAdd: $showAdd, refresh: $refresh)
-                .environmentObject(AdditionData.example())
-                .environmentObject(ProfileData.example())
-        } detail: {
-            Text("content")
-        }
+#Preview {
+    NavigationSplitView {
+        AdditionList(
+            apiManager: ApiManager(),
+            additionSelection: .constant("1"),
+            showProfile: .constant(false),
+            showAdd: .constant(false),
+            refresh: .constant(false)
+        )
+            .environmentObject(AdditionData.example())
+            .environmentObject(ProfileData.example())
+    } detail: {
+        Text("content")
     }
 }
