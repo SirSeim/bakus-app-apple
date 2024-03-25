@@ -19,6 +19,10 @@ class AdditionData: ObservableObject {
         }
     }
     
+    func get(id: String) -> Addition? {
+        additions.first(where: {$0.id == id})
+    }
+    
     static func example() -> AdditionData {
         let data = AdditionData()
         data.additions = [

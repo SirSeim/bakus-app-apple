@@ -14,9 +14,8 @@ struct TVSummary: View {
     var apiManager: ApiManager
     
     var titleRename: TitleRename
-    var season: String
     
-    @State var renames: [FileRename]
+    @Binding var renames: [FileRename]
     @State var deleteRest = false
     @State var untouchedFiles: [File] = []
     
@@ -28,7 +27,7 @@ struct TVSummary: View {
             Form {
                 LabeledContent("Original Title", value: addition.name)
                 LabeledContent("New Title", value: titleRename.description)
-                LabeledContent("Season", value: season)
+                LabeledContent("Season", value: titleRename.season)
                 Section("Files") {
                     ForEach($renames) { $rename in
                         VStack {
@@ -64,8 +63,8 @@ struct TVSummary: View {
                     print("renaming tv")
                     doingRename =  true
                     
-                    guard let seasonInt = Int(season) else {
-                        print("year must be int \(season)")
+                    guard let seasonInt = Int(titleRename.season) else {
+                        print("season must be int \(titleRename.season)")
                         // TODO: show actual error
                         doingRename = false
                         return
@@ -110,11 +109,10 @@ struct TVSummary: View {
     TVSummary(
         addition: Addition.exampleTV,
         apiManager: ApiManager(),
-        titleRename: TitleRename(name: "Mystery Science Theater 3000", year: 1988),
-        season: "1",
-        renames: [
+        titleRename: TitleRename(name: "Mystery Science Theater 3000", year: 1988, season: 1),
+        renames: .constant([
             FileRename(originalFile: "mst3k_s01e01-02.mov", newName: "mst3k - S01E01-02"),
             FileRename(originalFile: "mst3k_s01e03_Real_Run.mp4", newName: "mst3k - S01E03 - Real Run")
-        ]
+        ])
     )
 }

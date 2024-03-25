@@ -38,7 +38,7 @@ struct Summary: View {
     var apiManager: ApiManager
     var titleRename: TitleRename
     @State var deleteRest = false
-    @State var renames: [FileRename]
+    @Binding var renames: [FileRename]
     @State var untouchedFiles: [File] = []
     
     @State var doingRename = false
@@ -120,23 +120,21 @@ struct Summary: View {
     }
 }
 
-struct Summary_Previews: PreviewProvider {
-    static var previews: some View {
-        Summary(
-            addition: Addition.exampleComplete,
-            apiManager: ApiManager(),
-            titleRename: TitleRename(name: "The Day the Earth Stood Still", year: 1951),
-            renames: [
-                FileRename(originalName: "old", newName: "new"),
-                FileRename(
-                    title: TitleRename(name: "Video", year: 2001),
-                    subtitle: SubtitleChoice(name: "video.en.srt", language: .English)
-                ),
-                FileRename(
-                    title: TitleRename(name: "Video", year: 2001),
-                    subtitle: SubtitleChoice(name: "video.es.srt", language: .Spanish)
-                )
-            ]
-        )
-    }
+#Preview {
+    Summary(
+        addition: Addition.exampleComplete,
+        apiManager: ApiManager(),
+        titleRename: TitleRename(name: "The Day the Earth Stood Still", year: 1951),
+        renames: .constant([
+            FileRename(originalName: "old", newName: "new"),
+            FileRename(
+                title: TitleRename(name: "Video", year: 2001),
+                subtitle: SubtitleChoice(name: "video.en.srt", language: .English)
+            ),
+            FileRename(
+                title: TitleRename(name: "Video", year: 2001),
+                subtitle: SubtitleChoice(name: "video.es.srt", language: .Spanish)
+            )
+        ])
+    )
 }

@@ -54,8 +54,10 @@ struct TVEdit: View {
     var addition: Addition
     var apiManager: ApiManager
     
-    @State var title = TitleRename()
-    @State var season = ""
+    @Binding var state: RenameProcess
+    
+    @Binding var title: TitleRename
+    @Binding var renames: [FileRename]
     
     @State var episodes: [EpisodeChoice] = []
     
@@ -112,6 +114,44 @@ struct TVEdit: View {
     }
     .anchorsMatchLineEndings()
     
+    func buildFileRenames() {
+        var newRenames: [FileRename] = []
+        
+        var epSeason: Int = 0
+        if let season = Int(title.season) {
+            epSeason = season
+        }
+        let strSeason = String(format: "%02d", epSeason)
+        
+        // Add episodes
+        for episode in episodes {
+            // build episode number
+            var epNumber = ""
+            if let start = Int(episode.episodeStart) {
+                epNumber = String(format: "%02d", start)
+            }
+            if let end = Int(episode.episodeEnd) {
+                if episode.multiPartEpisode && end > 0 {
+                    epNumber += String(format: "-e%02d", end)
+                }
+            }
+            
+            // build episode title
+            var epTitle = ""
+            if episode.useEpisodeTitle && episode.episodeTitle.count > 0 {
+                epTitle = " - \(episode.episodeTitle)"
+            }
+            
+            // add the rename
+            newRenames.append(FileRename(
+                originalFile: episode.fileName,
+                newName: "\(title.description) - s\(strSeason)e\(epNumber)\(epTitle)"
+            ))
+        }
+        
+        renames = newRenames
+    }
+    
     var body: some View {
         Form {
             Section(header: Text("TV Show")) {
@@ -134,7 +174,7 @@ struct TVEdit: View {
                 HStack {
                     Text("Season")
                     Spacer()
-                    TextField("", text: $season)
+                    TextField("", text: $title.season)
                         .multilineTextAlignment(.trailing)
                     #if os(iOS)
                         .keyboardType(.decimalPad)
@@ -204,7 +244,8 @@ struct TVEdit: View {
                 }
             }
             Button {
-                // TODO: compile renames and pass onto Summary
+                buildFileRenames()
+                state = .TVSummary
             } label: {
                 HStack {
                     Text("Continue")
@@ -229,7 +270,7 @@ struct TVEdit: View {
                 }
             }
             if let s = showSeason {
-                season = String(s)
+                title.season = String(s)
             }
             
             // Generate episode list
@@ -276,5 +317,11 @@ struct TVEdit: View {
 }
 
 #Preview {
-    TVEdit(addition: Addition.exampleTV, apiManager: ApiManager())
+    TVEdit(
+        addition: Addition.exampleTV,
+        apiManager: ApiManager(),
+        state: .constant(.TVRename),
+        title: .constant(TitleRename()),
+        renames: .constant([])
+    )
 }
