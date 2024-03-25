@@ -292,7 +292,7 @@ class ApiManager {
     func renameTV(addition_id: String, title: String, season: Int, deleteRest: Bool, files: [FileRename]) async -> RenameTVPayload? {
         let payload = RenameTVPayload(title: title, season: season, deleteRest: deleteRest, files: files)
         do {
-            return try await postData(urlString: "/api/v1/addition/\(addition_id)/rename-tv", data: payload)
+            return try await postData(urlString: "/api/v1/addition/\(addition_id)/rename-tv-season", data: payload)
         } catch {
             print("failed to rename tv: \(error)")
             return nil
