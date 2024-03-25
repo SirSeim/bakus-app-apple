@@ -125,6 +125,11 @@ struct TVEdit: View {
         
         // Add episodes
         for episode in episodes {
+            // skip episodes not for this season
+            if !episode.includedInSeason {
+                continue
+            }
+            
             // build episode number
             var epNumber = ""
             if let start = Int(episode.episodeStart) {
